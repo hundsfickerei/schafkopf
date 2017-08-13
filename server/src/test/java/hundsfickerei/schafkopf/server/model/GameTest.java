@@ -1,5 +1,7 @@
 package hundsfickerei.schafkopf.server.model;
 
+import hundsfickerei.schafkopf.server.model.deck.DeckFactory;
+import hundsfickerei.schafkopf.server.model.deck.RandomLongCardDeckFactory;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,13 +22,17 @@ public class GameTest {
     public static class TestConfig {
         @Bean
         @Scope("prototype")
-        public Game game() {
-            return new Game();
+        public Game game(DeckFactory deckFactory) {
+            return new Game(deckFactory);
         }
         @Bean
         @Scope("prototype")
         public Player player(Game game) {
             return new RandomSoloPlayer(game);
+        }
+        @Bean
+        public DeckFactory deckFactory() {
+            return new RandomLongCardDeckFactory();
         }
     }
 

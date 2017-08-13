@@ -1,7 +1,8 @@
 package hundsfickerei.schafkopf.server.model;
 
+import hundsfickerei.schafkopf.server.model.deck.DeckFactory;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Game {
@@ -10,6 +11,11 @@ public class Game {
     private int gameModePlayer = -1;
     private List<Player> players;
     private int nextPlayer = 0;
+    private final DeckFactory deckFactory;
+
+    public Game(DeckFactory deckFactory) {
+        this.deckFactory = deckFactory;
+    }
 
     public GameMode getGameMode() {
         return gameMode;
@@ -37,7 +43,7 @@ public class Game {
             return;
         }
 
-        List<Card> cards = shuffleCards();
+        List<Card> cards = deckFactory.buildDeck();
         dealCards(cards);
 
         for (int i = 0; i < 8; i++) {
@@ -144,18 +150,6 @@ public class Game {
                 hand.clear();
             }
         }
-    }
-
-    private List<Card> shuffleCards() {
-        List<Card> cards = new ArrayList<>();
-        for (Suit suit: Suit.values()) {
-            for (Rank rank: Rank.values()) {
-                Card card = new Card(suit, rank);
-                cards.add(card);
-            }
-        }
-        Collections.shuffle(cards);
-        return cards;
     }
 
     private void decideGameMode() {
