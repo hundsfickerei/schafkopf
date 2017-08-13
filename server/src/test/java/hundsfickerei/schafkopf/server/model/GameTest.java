@@ -5,6 +5,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 public class GameTest {
 
     @Test
@@ -16,11 +20,11 @@ public class GameTest {
         }
         game.init(players);
         game.start();
-        System.out.println("Points:");
+        int sum = 0;
         for (Player player : players) {
-            System.out.println(player.hashCode() + " " + player.getPoints());
+            sum = sum + player.getPoints();
         }
-
+        assertThat(sum, is(equalTo(120)));
     }
 
 }
