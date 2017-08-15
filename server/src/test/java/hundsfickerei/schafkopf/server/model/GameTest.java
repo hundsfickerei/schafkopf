@@ -1,7 +1,10 @@
 package hundsfickerei.schafkopf.server.model;
 
-import hundsfickerei.schafkopf.server.model.deck.DeckFactory;
-import hundsfickerei.schafkopf.server.model.deck.RandomLongCardDeckFactory;
+import hundsfickerei.schafkopf.model.Game;
+import hundsfickerei.schafkopf.model.Player;
+import hundsfickerei.schafkopf.model.RandomSoloPlayer;
+import hundsfickerei.schafkopf.model.deck.DeckFactory;
+import hundsfickerei.schafkopf.model.deck.RandomLongCardDeckFactory;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
