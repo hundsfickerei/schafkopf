@@ -11,11 +11,5 @@ public class ServerApplication {
 
 		SpringApplication.run(ServerApplication.class, args);
 
-		NetworkController netController = new NetworkController();
-		try {
-			netController.startGameServer();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }
