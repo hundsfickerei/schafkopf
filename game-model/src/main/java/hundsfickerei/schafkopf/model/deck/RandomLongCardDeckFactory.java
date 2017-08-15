@@ -1,8 +1,8 @@
-package hundsfickerei.schafkopf.server.model.deck;
+package hundsfickerei.schafkopf.model.deck;
 
-import hundsfickerei.schafkopf.server.model.Card;
-import hundsfickerei.schafkopf.server.model.Rank;
-import hundsfickerei.schafkopf.server.model.Suit;
+import hundsfickerei.schafkopf.model.Card;
+import hundsfickerei.schafkopf.model.Rank;
+import hundsfickerei.schafkopf.model.Suit;
 
 import java.util.ArrayList;
 import java.util.Collections;

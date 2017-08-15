@@ -1,4 +1,4 @@
-package hundsfickerei.schafkopf.server.model;
+package hundsfickerei.schafkopf.model;
 
 public class Card {
 

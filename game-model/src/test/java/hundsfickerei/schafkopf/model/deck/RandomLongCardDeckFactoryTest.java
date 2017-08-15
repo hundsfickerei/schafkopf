@@ -1,6 +1,6 @@
-package hundsfickerei.schafkopf.server.model.deck;
+package hundsfickerei.schafkopf.model.deck;
 
-import hundsfickerei.schafkopf.server.model.Card;
+import hundsfickerei.schafkopf.model.Card;
 import org.junit.Test;
 
 import java.util.List;

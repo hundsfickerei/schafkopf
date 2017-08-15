@@ -1,6 +1,6 @@
-package hundsfickerei.schafkopf.server.model;
+package hundsfickerei.schafkopf.model;
 
-import hundsfickerei.schafkopf.server.model.deck.DeckFactory;
+import hundsfickerei.schafkopf.model.deck.DeckFactory;
 
 import java.util.ArrayList;
 import java.util.List;
