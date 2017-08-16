@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/game-model/game-hundsfickerei.schafkopf.model.iml" filepath="$PROJECT_DIR$/game-model/game-hundsfickerei.schafkopf.model.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/schafkopf.iml" filepath="$PROJECT_DIR$/.idea/schafkopf.iml" />
       <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
     </modules>
