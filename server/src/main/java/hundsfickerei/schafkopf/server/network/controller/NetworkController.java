@@ -1,63 +1,42 @@
 package hundsfickerei.schafkopf.server.network.controller;
 
-
+import hundsfickerei.schafkopf.server.network.model.Client;
+import hundsfickerei.schafkopf.server.network.model.ClientConnectionHandler;
+import hundsfickerei.schafkopf.server.network.model.ClientMessageHandler;
+import hundsfickerei.schafkopf.server.network.model.ClientStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.zeromq.ZMQ;
+import org.zeromq.ZContext;
 
+import javax.annotation.PostConstruct;
 
-//@Controller
-//TODO make multi-threaded
-//TODO use pub-sub
+@Controller
 public class NetworkController {
 
     final static Logger LOG = LoggerFactory.getLogger(NetworkController.class);
-    final static String ADDRESS = "localhost";
-    final static String PORT = "5555";
 
-    private ZMQ.Socket socket;
+    @Autowired
+    ClientStore clientStore;
 
-    public NetworkController() throws InterruptedException {
-        LOG.debug("Starting game server ...");
-        this.startGameServer();
-    }
 
-    public void startGameServer() throws InterruptedException {
+    @PostConstruct
+    public void init() throws Exception {
 
-        ZMQ.Context context = ZMQ.context(1);
+        ZContext ctx = new ZContext();
+        ClientMessageHandler clientMessageHandler = new ClientMessageHandler(ctx);
+        ClientConnectionHandler clientConnectionHandler = new ClientConnectionHandler(ctx, clientStore);
+        new Thread(clientConnectionHandler).start();
 
-        //  Socket to talk to clients
-        socket = context.socket(ZMQ.REP);
-        socket.bind("tcp://" + ADDRESS + ":" + PORT);
-        LOG.debug("Opened ZeroMQ socket!");
-
-        while (!Thread.currentThread().isInterrupted()) {
-            // Wait for next request from the client
-            byte[] request = socket.recv(0);
-            String msg = new String(request);
-            LOG.debug("Received new request from client!");
-            LOG.debug("Payload is: " + msg);
-            handleRequest(msg);
+        Thread.sleep(5000);
+        System.out.println("AFTER SLEEP");
+        clientMessageHandler.broadcast("THIS IS A BROADCAST");
+        System.out.println("Sending message to each client");
+        for(Client client : clientStore.getClients()){
+            clientMessageHandler.sendToClient(client.getIdentity(), "DEDICATED MSG FOR " + client.getPlayerNumber());
         }
-        socket.close();
-        context.term();
     }
-
-
-    private void handleRequest(String request){
-        //TODO parse game state message
-        //TODO implement logic
-        sendResponse("This is a very smart response!");
-    }
-
-
-    public void sendResponse(String response){
-        //TODO should take GameStateMessage as parameter
-        LOG.debug("Sending response to client!");
-        socket.send(response.getBytes(), 0);
-    }
-
 
 
 }

@@ -2,13 +2,32 @@ package hundsfickerei.schafkopf.server.network.model;
 
 public class Client {
 
-    private String identifier;
+    private static int count = 0;
+    private String identity;
+    private int playerNumber;
 
-    public String getIdentifier() {
-        return identifier;
+    public Client(String identity, int playerNumber) {
+        this.identity = identity;
+        this.playerNumber = playerNumber;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public String getIdentity() {
+        return identity;
+    }
+
+    public static Client build(String id){
+        return new Client(id, count++);
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 }

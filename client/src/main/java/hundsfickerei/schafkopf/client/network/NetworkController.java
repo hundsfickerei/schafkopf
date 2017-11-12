@@ -1,33 +1,36 @@
 package hundsfickerei.schafkopf.client.network;
 
-
+import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
+import java.util.UUID;
+import java.util.Random;
 
-public class NetworkController {
+public class NetworkController  {
 
-    public void connectToServer()  {
+    private static Random rand = new Random(System.nanoTime());
 
-        ZMQ.Context context = ZMQ.context(1);
+    private ZMQ.Socket upChannel;
 
-        //  Socket to talk to server
-        System.out.println("Connecting to hello world server…");
+    private String identity;
 
-        ZMQ.Socket requester = context.socket(ZMQ.REQ);
-        requester.connect("tcp://localhost:5555");
+    public NetworkController() {
+        this.identity = UUID.randomUUID().toString();
+        initialize();
+    }
 
-        for (int requestNbr = 0; requestNbr != 10; requestNbr++) {
-            String request = "Hello";
-            System.out.println("Sending Hello " + requestNbr);
-            requester.send(request.getBytes(), 0);
+    private void initialize() {
+        ZContext ctx = new ZContext();
+        upChannel = ctx.createSocket(ZMQ.DEALER);
+        upChannel.setIdentity(identity.getBytes());
+        upChannel.connect("tcp://localhost:5570");
 
-            byte[] reply = requester.recv(0);
-            System.out.println("Received " + new String(reply) + " " + requestNbr);
-        }
-        requester.close();
-        context.term();
+        ServerConnectionWorker worker = new ServerConnectionWorker(ctx, upChannel, identity);
+        new Thread(worker).start();
 
+    }
 
-
+    public void sendToServer(String msg){
+        upChannel.send(msg,0);
     }
 
 
