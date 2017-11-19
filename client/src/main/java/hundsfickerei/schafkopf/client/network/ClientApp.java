@@ -8,14 +8,14 @@ public class ClientApp {
     public static void main(String[] args) throws InterruptedException {
 
         NetworkController networkController = new NetworkController();
-        OutgoingMessageHandler outgoingMessageHandler = networkController.getOutgoingMessageHandler();
-        outgoingMessageHandler.registerAtServer();
+        OutgoingMessageService outgoingMessageService = networkController.getOutgoingMessageService();
+        outgoingMessageService.registerAtServer();
         Thread.sleep(5000);
 
 
         GameStateMessage gsm = new GameStateMessage();
         gsm.setGameMode(GameMode.HERZ_SOLO);
-        outgoingMessageHandler.sendGameMessageToServer(gsm);
+        outgoingMessageService.sendGameMessageToServer(gsm);
 
 
         System.out.println("Done ...");

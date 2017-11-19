@@ -11,7 +11,7 @@ import static java.util.logging.Level.*;
 
 public class NetworkController  {
 
-    private final static Logger LOG = Logger.getLogger(IncomingMessageHandler.class.getSimpleName());
+    private final static Logger LOG = Logger.getLogger(IncomingMessageService.class.getSimpleName());
 
 
     private static Random rand = new Random(System.nanoTime());
@@ -20,13 +20,13 @@ public class NetworkController  {
 
     private String identity;
 
-    private IncomingMessageHandler incomingMessageHandler;
-    private OutgoingMessageHandler outgoingMessageHandler;
+    private IncomingMessageService incomingMessageService;
+    private OutgoingMessageService outgoingMessageService;
 
     public NetworkController() {
         this.identity = UUID.randomUUID().toString();
-        this.incomingMessageHandler = new IncomingMessageHandler();
-        this.outgoingMessageHandler = new OutgoingMessageHandler(this);
+        this.incomingMessageService = new IncomingMessageService();
+        this.outgoingMessageService = new OutgoingMessageService(this);
         initialize();
     }
 
@@ -45,11 +45,11 @@ public class NetworkController  {
         upChannel.send(msg,0);
     }
 
-    public void receiveMessageFromServer(String msg){
+    public synchronized void receiveMessageFromServer(String msg){
         LOG.log(INFO,"-------------------");
         LOG.log(INFO, "Received new message from server!");
         LOG.log(INFO,"Payload: " + msg);
-        incomingMessageHandler.processMessage(msg);
+        incomingMessageService.processMessage(msg);
     }
 
     public ZMQ.Socket getUpChannel() {
@@ -60,7 +60,7 @@ public class NetworkController  {
         return identity;
     }
 
-    public OutgoingMessageHandler getOutgoingMessageHandler() {
-        return outgoingMessageHandler;
+    public OutgoingMessageService getOutgoingMessageService() {
+        return outgoingMessageService;
     }
 }

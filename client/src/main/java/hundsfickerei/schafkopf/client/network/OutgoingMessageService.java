@@ -9,15 +9,15 @@ import java.util.logging.Logger;
 
 import static java.util.logging.Level.*;
 
-public class OutgoingMessageHandler {
+public class OutgoingMessageService {
 
-    private final static Logger LOG = Logger.getLogger(IncomingMessageHandler.class.getSimpleName());
+    private final static Logger LOG = Logger.getLogger(IncomingMessageService.class.getSimpleName());
 
     private ObjectMapper mapper = new ObjectMapper();
 
     private NetworkController controller;
 
-    public OutgoingMessageHandler(NetworkController controller) {
+    public OutgoingMessageService(NetworkController controller) {
         this.controller = controller;
     }
 

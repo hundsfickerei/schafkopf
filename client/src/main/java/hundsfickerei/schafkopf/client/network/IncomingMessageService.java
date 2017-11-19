@@ -9,14 +9,14 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import static java.util.logging.Level.*;
 
-public class IncomingMessageHandler {
+public class IncomingMessageService {
 
-    private final static Logger LOG = Logger.getLogger(IncomingMessageHandler.class.getSimpleName());
+    private final static Logger LOG = Logger.getLogger(IncomingMessageService.class.getSimpleName());
 
 
     private static  ObjectMapper mapper = new ObjectMapper();
 
-    public synchronized void processMessage(String msg){
+    public void processMessage(String msg){
         try {
             NetStateMessage netStateMessage = mapper.readValue(msg, NetStateMessage.class);
             switch (netStateMessage.getType()){

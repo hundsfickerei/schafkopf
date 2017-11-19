@@ -25,13 +25,12 @@ public class ServerConnectionWorker implements Runnable{
         downChannel = ctx.createSocket(ZMQ.SUB);
         downChannel.connect("tcp://localhost:5500");
         downChannel.subscribe("GAME".getBytes());
-        //topic with own identity is used to receive dedicated messages
+        //(2) subscribe to topic with own identity, which is used to receive dedicated messages
         downChannel.subscribe(controller.getIdentity().getBytes());
 
         ZMQ.PollItem[] items = new ZMQ.PollItem[] { new ZMQ.PollItem(controller.getUpChannel(), ZMQ.Poller.POLLIN),
                 new ZMQ.PollItem(downChannel, ZMQ.Poller.POLLIN)};
 
-        int requestNbr = 0;
         Selector selector = buildSelector();
         while (!Thread.currentThread().isInterrupted()) {
             //  Tick once per second, pulling in arriving messages
@@ -39,18 +38,15 @@ public class ServerConnectionWorker implements Runnable{
                 ZMQ.poll(selector, items, 10);
                 if (items[0].isReadable()) {
                     ZMsg msg = ZMsg.recvMsg(controller.getUpChannel());
-                    //msg.getLast().print(controller.getIdentity());
                     controller.receiveMessageFromServer(msg.getLast().toString());
                     msg.destroy();
                 }
                 if(items[1].isReadable()){
                     ZMsg subMsg = ZMsg.recvMsg(downChannel);
-                    //subMsg.getLast().print(controller.getIdentity());
                     controller.receiveMessageFromServer(subMsg.getLast().toString());
                     subMsg.destroy();
                 }
             }
-            //upChannel.send(String.format("Message from Client #%d", ++requestNbr), 0);
         }
         ctx.destroy();
     }
