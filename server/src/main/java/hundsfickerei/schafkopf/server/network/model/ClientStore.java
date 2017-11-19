@@ -20,9 +20,9 @@ public class ClientStore {
 
         if( ! any.isPresent()){
             clients.add(Client.build(id));
-            LOG.debug("Client " + id +" registered!");
+            LOG.debug("Registered client " + id + "!");
         } else {
-            LOG.debug("Client already registered!");
+            LOG.debug("Client is already registered!");
         }
     }
 
