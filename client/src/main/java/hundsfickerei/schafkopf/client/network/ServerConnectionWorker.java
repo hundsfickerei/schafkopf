@@ -9,15 +9,13 @@ import java.nio.channels.Selector;
 
 public class ServerConnectionWorker implements Runnable{
 
-    private ZMQ.Socket upChannel;
+    private NetworkController controller;
     private ZMQ.Socket downChannel;
-    private String identity;
     private ZContext ctx;
 
-    public ServerConnectionWorker(ZContext ctx, ZMQ.Socket upChannel, String identity) {
+    public ServerConnectionWorker(ZContext ctx, NetworkController controller) {
         this.ctx = ctx;
-        this.upChannel = upChannel;
-        this.identity = identity;
+        this.controller = controller;
     }
 
     @Override
@@ -28,9 +26,9 @@ public class ServerConnectionWorker implements Runnable{
         downChannel.connect("tcp://localhost:5500");
         downChannel.subscribe("GAME".getBytes());
         //topic with own identity is used to receive dedicated messages
-        downChannel.subscribe(identity.getBytes());
+        downChannel.subscribe(controller.getIdentity().getBytes());
 
-        ZMQ.PollItem[] items = new ZMQ.PollItem[] { new ZMQ.PollItem(upChannel, ZMQ.Poller.POLLIN),
+        ZMQ.PollItem[] items = new ZMQ.PollItem[] { new ZMQ.PollItem(controller.getUpChannel(), ZMQ.Poller.POLLIN),
                 new ZMQ.PollItem(downChannel, ZMQ.Poller.POLLIN)};
 
         int requestNbr = 0;
@@ -40,13 +38,15 @@ public class ServerConnectionWorker implements Runnable{
             for (int centitick = 0; centitick < 100; centitick++) {
                 ZMQ.poll(selector, items, 10);
                 if (items[0].isReadable()) {
-                    ZMsg msg = ZMsg.recvMsg(upChannel);
-                    msg.getLast().print(identity);
+                    ZMsg msg = ZMsg.recvMsg(controller.getUpChannel());
+                    //msg.getLast().print(controller.getIdentity());
+                    controller.receiveMessageFromServer(msg.getLast().toString());
                     msg.destroy();
                 }
                 if(items[1].isReadable()){
                     ZMsg subMsg = ZMsg.recvMsg(downChannel);
-                    subMsg.getLast().print(identity);
+                    //subMsg.getLast().print(controller.getIdentity());
+                    controller.receiveMessageFromServer(subMsg.getLast().toString());
                     subMsg.destroy();
                 }
             }
