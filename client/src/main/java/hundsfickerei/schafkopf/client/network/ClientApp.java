@@ -1,15 +1,23 @@
 package hundsfickerei.schafkopf.client.network;
 
-import java.net.URISyntaxException;
+import hundsfickerei.schafkopf.model.GameMode;
+import hundsfickerei.schafkopf.network.model.GameStateMessage;
 
 public class ClientApp {
 
     public static void main(String[] args) throws InterruptedException {
 
         NetworkController networkController = new NetworkController();
-        Thread.sleep(2000);
-        networkController.sendToServer("1st message");
-        networkController.sendToServer("2nd message");
+        OutgoingMessageHandler outgoingMessageHandler = networkController.getOutgoingMessageHandler();
+        outgoingMessageHandler.registerAtServer();
+        Thread.sleep(5000);
+
+
+        GameStateMessage gsm = new GameStateMessage();
+        gsm.setGameMode(GameMode.HERZ_SOLO);
+        outgoingMessageHandler.sendGameMessageToServer(gsm);
+
+
         System.out.println("Done ...");
 
 
